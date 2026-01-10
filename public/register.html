@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="style.css"></head>
+<body style="background:#0f172a; display:flex; justify-content:center; align-items:center; height:100vh;">
+    <div style="background:#1e293b; padding:40px; border-radius:15px; width:300px; color:white; text-align:center;">
+        <h2>Cont Nou</h2>
+        <form action="/auth/register" method="POST" style="display:flex; flex-direction:column; gap:10px;">
+            <input type="text" name="username" placeholder="Username" required style="padding:10px; border-radius:5px;">
+            <input type="password" name="password" placeholder="Parola" required style="padding:10px; border-radius:5px;">
+            <button type="submit" class="btn-primary">Creeaza Cont</button>
+        </form>
+        <a href="/login.html" style="color:#38bdf8">Inapoi la login</a>
+    </div>
+</body>
+</html>

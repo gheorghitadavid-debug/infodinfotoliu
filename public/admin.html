@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Info din Fotoliu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; padding: 50px; }
+        .admin-container { max-width: 600px; margin: auto; }
+        .card { background: #1e293b; padding: 30px; border-radius: 15px; margin-bottom: 30px; border: 1px solid #333; }
+        input, textarea, select { 
+            width: 100%; padding: 12px; margin: 10px 0; 
+            border-radius: 5px; border: 1px solid #333; 
+            background: #0f172a; color: white; 
+        }
+        h2 { color: #38bdf8; margin-top: 0; }
+        .btn-delete { background: #ef4444; border: none; cursor: pointer; font-weight: bold; }
+        .btn-delete:hover { background: #b91c1c; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <center><a href="/" style="color: #38bdf8; text-decoration: none;"><- Inapoi la Site</a></center>
+        <br>
+
+        <div class="card">
+            <h2>Adauga Problema Noua</h2>
+            <form action="/adauga-problema" method="POST">
+                <input type="password" name="parola" placeholder="Parola Admin" required>
+                <input type="text" name="titlu" placeholder="Titlu Problema" required>
+                <select name="dificultate">
+                    <option>Usor</option>
+                    <option>Mediu</option>
+                    <option>Greu</option>
+                </select>
+                <textarea name="cerinta" rows="5" placeholder="Enuntul problemei..." required></textarea>
+                <input type="text" name="teste_raw" placeholder="Teste (Ex: 2 2|4, 5 5|10)" required>
+                <button type="submit" class="btn-primary" style="width: 100%;">Publica Problema</button>
+            </form>
+        </div>
+
+        <div class="card" style="border-color: #ef4444;">
+            <h2 style="color: #ef4444;">Sterge o Problema</h2>
+            <p style="font-size: 13px; color: #94a3b8;">Introdu titlul exact al problemei pe care vrei sa o elimini definitiv.</p>
+            <form action="/sterge-problema" method="POST">
+                <input type="password" name="parola" placeholder="Parola Admin" required>
+                <input type="text" name="titlu" placeholder="Titlul exact al problemei" required>
+                <button type="submit" class="btn-primary btn-delete" style="width: 100%;">Sterge Problema</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Header curat, fara text in stanga */
+        header {
+            display: flex;
+            justify-content: flex-end; /* Impinge butoanele in dreapta */
+            padding: 20px 50px;
+            background: #0f172a;
+        }
+
+        .hero { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 80vh; 
+            flex-direction: column; 
+        }
+
+        .logo-mare { 
+            width: 450px; 
+            height: auto; 
+            filter: drop-shadow(0 0 20px #38bdf8); 
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/probleme">Probleme</a>
+            <a href="/clasament">Clasament</a>
+            <a href="/login.html">Login</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <img src="logo.png" class="logo-mare">
+        <br><br>
+        <a href="/probleme">
+            <button class="btn-primary" style="padding: 15px 40px; font-size: 1.2rem; cursor: pointer;">Incepe</button>
+        </a>
+    </main>
+</body>
+</html>

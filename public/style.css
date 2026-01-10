@@ -1,0 +1,13 @@
+:root { --bg: #0f172a; --primary: #38bdf8; --text: #f8fafc; }
+body { font-family: sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+header { display: flex; justify-content: space-between; padding: 20px 8%; background: rgba(0,0,0,0.2); border-bottom: 1px solid #333; align-items: center; }
+.logo-img { height: 60px; }
+.logo-text { font-size: 24px; font-weight: bold; }
+.info { color: var(--primary); }
+.hero { height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+.btn-primary { background: var(--primary); border: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.btn-secondary { background: transparent; color: white; border: 1px solid #555; padding: 15px 30px; border-radius: 8px; cursor: pointer; margin-left: 10px; }
+.card { background: #1e293b; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-top: 20px; }
+.diff { color: #4ade80; font-size: 0.8rem; font-weight: bold; }
+nav a { color: white; text-decoration: none; margin-left: 20px; }
+input, select { padding: 10px; border-radius: 5px; border: 1px solid #333; background: #1e293b; color: white; }
