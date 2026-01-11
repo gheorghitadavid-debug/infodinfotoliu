@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 // --- CONECTARE MONGODB (Pune parola ta în loc de PAROLA_TA_AICI) ---
-const MONGO_URI = "mongodb+srv://gheorghitadavid_db_user:PAROLA_TA_AICI@cluster0.dun9hav.mongodb.net/?appName=Cluster0";
+const MONGO_URI = "mongodb+srv://gheorghitadavid_db_user:P)a1s2s2@cluster0.dun9hav.mongodb.net/?appName=Cluster0";
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log("✅ Conectat la MongoDB Atlas"))
@@ -155,3 +155,4 @@ app.post('/sterge-problema', async (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server on port ${PORT}`));
+
