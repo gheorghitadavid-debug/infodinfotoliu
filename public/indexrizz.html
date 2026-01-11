@@ -1,54 +1,40 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Header curat, fara text in stanga */
-        header {
-            display: flex;
-            justify-content: flex-end; /* Impinge butoanele in dreapta */
-            padding: 20px 50px;
-            background: #0f172a;
-        }
-
-        .hero { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 80vh; 
-            flex-direction: column; 
-        }
-
-        .logo-mare { 
-            width: 450px; 
-            height: auto; 
-            filter: drop-shadow(0 0 20px #38bdf8); 
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: bold;
-        }
+        header { display: flex; justify-content: flex-end; padding: 20px 50px; background: #0f172a; }
+        .hero { display: flex; justify-content: center; align-items: center; height: 80vh; flex-direction: column; text-align: center; }
+        .logo-mare { width: 450px; filter: drop-shadow(0 0 20px #38bdf8); }
+        nav a { color: white; text-decoration: none; margin-left: 20px; font-weight: bold; }
+        nav a:hover { color: #38bdf8; }
+        .container-butoane { display: flex; gap: 15px; margin-top: 30px; }
+        .btn-teme { background: #fbbf24; color: #0f172a; padding: 15px 40px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 8px; font-weight: bold; }
+        .btn-primary { background: #38bdf8; color: white; padding: 15px 40px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
     <header>
         <nav>
             <a href="/probleme">Probleme</a>
+            <a href="/monitor">Submisii</a>
+            <a href="/clase">Clase</a>
+            <a href="/prieteni">Prieteni</a>
             <a href="/clasament">Clasament</a>
+            <a href="/profil">Profil</a>
             <a href="/login.html">Login</a>
         </nav>
     </header>
-
     <main class="hero">
-        <img src="logo.png" class="logo-mare">
-        <br><br>
-        <a href="/probleme">
-            <button class="btn-primary" style="padding: 15px 40px; font-size: 1.2rem; cursor: pointer;">Incepe</button>
-        </a>
+        <img src="logo.png" class="logo-mare" alt="Logo">
+        <div class="container-butoane">
+            <a href="/probleme"><button class="btn-primary">Începe</button></a>
+            <a href="/clase"><button class="btn-teme">Teme</button></a>
+        </div>
+        <p style="margin-top: 25px; color: #94a3b8;">
+            Vrei să dai share? Mergi la <a href="/monitor" style="color:#38bdf8; text-decoration: none;">Submisii</a> și apasă pe ID-ul soluției.
+        </p>
     </main>
 </body>
 </html>
