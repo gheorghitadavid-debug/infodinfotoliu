@@ -2,21 +2,32 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <title>RIZZ Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        header { display: flex; justify-content: flex-end; padding: 20px 50px; background: #0f172a; }
-        .hero { display: flex; justify-content: center; align-items: center; height: 75vh; flex-direction: column; text-align: center; }
-        .logo-mare { width: 450px; filter: drop-shadow(0 0 20px #38bdf8); }
-        nav a { color: white; text-decoration: none; margin-left: 20px; font-weight: bold; }
-        .container-butoane { display: flex; gap: 20px; margin-top: 40px; }
-        .btn-teme { background: #fbbf24; color: #0f172a; padding: 18px 50px; font-size: 1.3rem; cursor: pointer; border: none; border-radius: 10px; font-weight: bold; }
-        .btn-primary { background: #38bdf8; color: white; padding: 18px 50px; font-size: 1.3rem; cursor: pointer; border: none; border-radius: 10px; font-weight: bold; }
-        footer { background: #1e293b; padding: 40px; margin-top: 50px; border-top: 4px solid #38bdf8; text-align: center; }
-        .contact-box { font-size: 1.5rem; color: white; font-weight: bold; }
-        .email-link { color: #38bdf8; text-decoration: none; border-bottom: 2px solid #38bdf8; }
+        :root { --primary: #38bdf8; --bg: #0f172a; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+        header { display: flex; justify-content: flex-end; padding: 20px 50px; background: transparent; }
+        nav a { color: white; text-decoration: none; margin-left: 25px; font-weight: bold; opacity: 0.8; transition: 0.3s; }
+        nav a:hover { opacity: 1; color: var(--primary); }
+        
+        .hero { height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .logo-container { position: relative; margin-bottom: 30px; }
+        .logo-mare { width: 450px; filter: drop-shadow(0 0 30px rgba(56, 189, 248, 0.5)); animation: float 4s ease-in-out infinite; }
+        
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        .btn-main { padding: 20px 60px; font-size: 1.5rem; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; transition: 0.4s; text-decoration: none; display: inline-block; margin: 10px; }
+        .btn-start { background: var(--primary); color: white; box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3); }
+        .btn-teme { background: #fbbf24; color: #0f172a; box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3); }
+        .btn-main:hover { transform: scale(1.1); box-shadow: 0 15px 35px rgba(56, 189, 248, 0.5); }
+
+        footer { background: #0b1120; padding: 60px 20px; border-top: 4px solid var(--primary); text-align: center; }
+        .contact-card { background: #1e293b; display: inline-block; padding: 30px 50px; border-radius: 20px; border: 1px solid #334155; }
+        .email { font-size: 1.8rem; color: var(--primary); text-decoration: none; display: block; margin-top: 15px; letter-spacing: 1px; }
     </style>
 </head>
-<body style="margin:0; font-family: sans-serif; background:#0f172a; color:white;">
+<body>
     <header>
         <nav>
             <a href="/probleme">Probleme</a>
@@ -24,21 +35,26 @@
             <a href="/clase">Clase</a>
             <a href="/prieteni">Prieteni</a>
             <a href="/clasament">Clasament</a>
-            <a href="/profil">Profil</a>
-            <a href="/login.html">Login</a>
         </nav>
     </header>
-    <main class="hero">
-        <img src="logo.png" class="logo-mare">
-        <div class="container-butoane">
-            <a href="/probleme"><button class="btn-primary">Începe</button></a>
-            <a href="/clase"><button class="btn-teme">Teme</button></a>
+
+    <div class="hero">
+        <div class="logo-container">
+            <img src="logo.png" class="logo-mare" alt="RIZZ Logo">
         </div>
-    </main>
+        <h1 style="font-size: 3rem; margin: 0;">Performanță în Programare</h1>
+        <p style="color: #94a3b8; font-size: 1.2rem; max-width: 600px;">Învață, concurează și colaborează cu cea mai modernă platformă pentru elevii ICHB.</p>
+        
+        <div class="container-butoane">
+            <a href="/probleme" class="btn-main btn-start">ÎNCEPE</a>
+            <a href="/clase" class="btn-main btn-teme">TEME</a>
+        </div>
+    </div>
+
     <footer>
-        <div class="contact-box">
-            📢 Pentru sugestii contactați adresa de email: <br>
-            <a href="mailto:gheorghita.david@ichb.ro" class="email-link">gheorghita.david@ichb.ro</a>
+        <div class="contact-card">
+            <span style="font-size: 1.2rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;">Ai sugestii? Scrie-mi aici</span>
+            <a href="mailto:gheorghita.david@ichb.ro" class="email">gheorghita.david@ichb.ro</a>
         </div>
     </footer>
 </body>
