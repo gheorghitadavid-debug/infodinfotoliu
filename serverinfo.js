@@ -5,21 +5,26 @@ const fs = require('fs');
 const session = require('express-session');
 const app = express();
 
-// Setari Server
+const PORT = process.env.PORT || 10000;
+
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'secret-info-fotoliu',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { secure: false }
 }));
 
 const PATH_PROBLEME = path.join(__dirname, 'probleme.json');
 const PATH_USERS = path.join(__dirname, 'utilizatori.json');
 
-// Functie citire DB (curata caractere invizibile BOM)
 const readDB = (p) => {
-    if (!fs.existsSync(p)) return [];
+    if (!fs.existsSync(p)) {
+        fs.writeFileSync(p, '[]');
+        return [];
+    }
     try {
         let content = fs.readFileSync(p, 'utf8');
         content = content.replace(/^\uFEFF/, '').trim(); 
@@ -29,16 +34,15 @@ const readDB = (p) => {
 
 const writeDB = (p, d) => fs.writeFileSync(p, JSON.stringify(d, null, 2));
 
-// --- RUTE NAVIGARE ---
+// --- RUTE PAGINI ---
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'indexrizz.html')));
 app.get('/admin-secret', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
 
-// --- AUTENTIFICARE ---
+// --- LOGIN & REGISTER ---
 app.post('/auth/register', (req, res) => {
     const { username, password } = req.body;
     let users = readDB(PATH_USERS);
     if (users.find(u => u.username === username)) return res.send("Nume ocupat!");
-    // Adaugam obiectul 'rezolvate' pentru a tine evidenta scorurilor per problema
     users.push({ username, password, score: 0, rezolvate: {} });
     writeDB(PATH_USERS, users);
     res.redirect('/login.html');
@@ -54,15 +58,15 @@ app.post('/auth/login', (req, res) => {
     } else { res.send("Date gresite! <a href='/login.html'>Inapoi</a>"); }
 });
 
-// --- AFISARE PROBLEME ---
+// --- PROBLEME & EVALUATOR ---
 app.get('/probleme', (req, res) => {
     const lista = readDB(PATH_PROBLEME);
-    let html = `<html><head><link rel="stylesheet" href="style.css"></head><body style="background:#0f172a;color:white;padding:50px;font-family:sans-serif;">`;
+    let html = `<html><head><link rel="stylesheet" href="/style.css"></head><body style="background:#0f172a;color:white;padding:50px;font-family:sans-serif;">`;
     html += `<h1>Arhiva Probleme</h1><a href="/" style="color:#38bdf8;text-decoration:none;"><- Acasa</a><br><br>`;
     lista.forEach((p, i) => {
         html += `<div style="background:#1e293b;padding:20px;border-radius:10px;margin-bottom:10px;border:1px solid #333;">
             <h3>${p.titlu} (${p.dificultate})</h3>
-            <a href="/problema/${i}"><button class="btn-primary">Rezolva</button></a>
+            <a href="/problema/${i}"><button style="background:#38bdf8; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">Rezolva</button></a>
         </div>`;
     });
     res.send(html + "</body></html>");
@@ -77,12 +81,11 @@ app.get('/problema/:id', (req, res) => {
         <div style="background:#1e293b;padding:20px;border-radius:10px;line-height:1.6;">${p.cerinta}</div>
         <form action="/submit/${req.params.id}" method="POST">
             <textarea name="cod" rows="15" style="width:100%;background:#011627;color:white;padding:15px;margin-top:20px;font-family:monospace;" placeholder="Scrie codul C++ aici..."></textarea>
-            <button type="submit" class="btn-primary" style="width:100%;margin-top:10px;cursor:pointer;">Trimite Solutia</button>
+            <button type="submit" style="width:100%;margin-top:10px;cursor:pointer;background:#38bdf8;color:white;padding:15px;border:none;border-radius:5px;">Trimite Solutia</button>
         </form>
         <br><a href="/probleme" style="color:#38bdf8">Inapoi la lista</a></body></html>`);
 });
 
-// --- EVALUATOR SI PUNCTAJ (ANTI-CHEAT) ---
 app.post('/submit/:id', async (req, res) => {
     if (!req.session.user) return res.send("Sesiune expirata.");
     const pId = req.params.id;
@@ -96,33 +99,26 @@ app.post('/submit/:id', async (req, res) => {
             const r = await axios.post('https://ce.judge0.com/submissions?base64_encoded=false&wait=true', {
                 source_code: req.body.cod, language_id: 54, stdin: t.in, expected_output: t.out
             });
-            
             const outReal = (r.data.stdout || "").trim();
             const outAsteptat = (t.out || "").trim();
-
-            if (r.data.status.description === "Accepted" || outReal === outAsteptat) {
+            if (r.data.status && (r.data.status.description === "Accepted" || outReal === outAsteptat)) {
                 punctajDobandit += (100 / p.teste.length);
-                feedback += `<p style="color:#4ade80">Test ${i+1}: Corect ?</p>`;
+                feedback += `<p style="color:#4ade80">Test ${i+1}: Corect ✅</p>`;
             } else {
-                feedback += `<p style="color:#f87171">Test ${i+1}: ${r.data.status.description} ?</p>`;
+                feedback += `<p style="color:#f87171">Test ${i+1}: Gresit ❌</p>`;
             }
         }
-
         let scorFinal = Math.round(punctajDobandit);
         let users = readDB(PATH_USERS);
         let uIdx = users.findIndex(u => u.username === req.session.user);
-
         if (uIdx !== -1) {
             if (!users[uIdx].rezolvate) users[uIdx].rezolvate = {};
             let scorVechi = users[uIdx].rezolvate[pId] || 0;
-
             if (scorFinal > scorVechi) {
                 users[uIdx].score += (scorFinal - scorVechi);
                 users[uIdx].rezolvate[pId] = scorFinal;
                 writeDB(PATH_USERS, users);
-                feedback += `<h2 style="color:#38bdf8">Bravo! Scorul tau a crescut!</h2>`;
-            } else {
-                feedback += `<h2 style="color:#94a3b8">Ai mai rezolvat-o. Nu s-au adaugat puncte noi.</h2>`;
+                feedback += `<h2 style="color:#38bdf8">Scorul a crescut!</h2>`;
             }
         }
         res.send(`<body style="background:#0f172a;color:white;padding:50px;font-family:sans-serif;"><h1>Scor: ${scorFinal}p</h1>${feedback}<br><a href="/probleme" style="color:#38bdf8">Inapoi</a></body>`);
@@ -132,13 +128,8 @@ app.post('/submit/:id', async (req, res) => {
 // --- CLASAMENT ---
 app.get('/clasament', (req, res) => {
     let users = readDB(PATH_USERS).sort((a,b) => b.score - a.score);
-    let rows = users.map((u, i) => `<tr><td style="padding:10px;border:1px solid #333;">${i+1}</td><td style="padding:10px;border:1px solid #333;">${u.username}</td><td style="padding:10px;border:1px solid #333;">${u.score}p</td></tr>`).join('');
-    res.send(`<html><head><link rel="stylesheet" href="style.css"></head><body style="background:#0f172a;color:white;padding:50px;font-family:sans-serif;">
-        <h1 style="text-align:center">Top Programatori</h1>
-        <table style="width:100%;background:#1e293b;border-collapse:collapse;text-align:center;">
-            <tr style="background:#334155"><th>Loc</th><th>Nume</th><th>Punctaj Total</th></tr>
-            ${rows}
-        </table><br><center><a href="/" style="color:#38bdf8">Acasa</a></center></body></html>`);
+    let rows = users.map((u, i) => `<tr><td>${i+1}</td><td>${u.username}</td><td>${u.score}p</td></tr>`).join('');
+    res.send(`<html><head><link rel="stylesheet" href="/style.css"></head><body style="background:#0f172a;color:white;padding:50px;font-family:sans-serif;"><h1 style="text-align:center">Top Programatori</h1><table style="width:100%;background:#1e293b;border-collapse:collapse;text-align:center;">${rows}</table><br><center><a href="/" style="color:#38bdf8">Acasa</a></center></body></html>`);
 });
 
 // --- ADMIN (ADAUGARE SI STERGERE) ---
@@ -164,4 +155,5 @@ app.post('/sterge-problema', (req, res) => {
     res.send("Sters cu succes! <a href='/admin-secret'>Inapoi</a>");
 });
 
-app.listen(3000, () => console.log("?? Server pornit pe http://localhost:3000"));
+// PORNIRE
+app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server pornit pe portul ${PORT}`));
